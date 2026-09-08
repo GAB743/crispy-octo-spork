@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChE Week Merch Desk</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f3f4f6; margin: 0; padding: 40px 20px; color: #333; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1, h2, h3 { color: #111827; margin-bottom: 8px; }
+        p { color: #6b7280; margin-top: 0; font-size: 0.95em; }
+        
+        /* Tab Styles */
+        .tabs { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+        .tab-btn { background: none; border: none; font-size: 1.1em; font-weight: 600; color: #6b7280; cursor: pointer; padding: 5px 10px; }
+        .tab-btn.active { color: #2563eb; border-bottom: 3px solid #2563eb; }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 40px; font-size: 0.9em; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background-color: #f9fafb; font-weight: 600; }
+        .low-stock { color: #b91c1c; font-weight: bold; }
+        .in-stock { color: #047857; }
+
+        .form-section { border-top: 2px solid #f3f4f6; padding-top: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9em; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .item-block { border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; margin-bottom: 20px; background-color: #f9fafb; }
+        .radio-group { display: flex; gap: 20px; }
+        .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        
+        .btn { background-color: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1em; }
+        .btn-secondary { background-color: #e5e7eb; color: #374151; padding: 8px 16px; font-size: 0.9em; border: none; border-radius: 6px; cursor: pointer; }
+        .totals-box { font-size: 1.2em; font-weight: bold; margin: 30px 0 20px 0; color: #111827; }
+    
+        /* --- MOBILE RESPONSIVE TWEAKS --- */
+        @media (max-width: 600px) {
+            /* Reduce background margins so the app takes up the whole screen */
+            body { padding: 10px; }
+            .container { padding: 20px 15px; border-radius: 8px; }
+            
+            /* Make headers a bit smaller to save space */
+            h1 { font-size: 1.5em; }
+            h2 { font-size: 1.3em; }
+
+            /* Allow tables to swipe left/right instead of squishing text */
+            table { display: block; overflow-x: auto; white-space: nowrap; }
+            th, td { padding: 10px; }
+
+            /* Wrap tabs to a new line if they get too wide */
+            .tabs { gap: 10px; justify-content: space-between; }
+            .tab-btn { font-size: 1em; padding: 5px 0; flex: 1; }
+
+            /* Make buttons full-width for easy thumb pressing */
+            .btn { width: 100%; padding: 15px; font-size: 1.1em; }
+            
+            /* Add some breathing room to the radio buttons */
+            .radio-group { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ChE Week Merch Desk</h1>
+    
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('store', this)">Store</button>
+        <button class="tab-btn" onclick="switchTab('orders', this)">Orders</button>
+        <button class="tab-btn" onclick="switchTab('inventory', this)">Inventory</button>
+    </div>
+
+    <!-- STORE TAB -->
+    <div id="store" class="view-section active">
+        <section>
+            <h2>Merchandise availability</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Size / specification</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Available</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryBody">
+                    <!-- Javascript will inject table rows here -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="form-section">
+            <h2>Record a staff order</h2>
+            <form id="orderForm">
+                <div id="itemsContainer">
+                    <div class="item-block">
+                        <button type="button" class="btn-remove" style="color: #dc2626; float: right; border: none; background: none; font-weight: bold; display: none; cursor:pointer;">Remove</button>
+                        <h3 class="item-title">Item 1</h3>
+                        <div class="form-group">
+                            <label>Merchandise item</label>
+                            <select class="item-select">
+                                <option value="">Choose an item</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Size / specification</label>
+                            <select class="spec-select">
+                                <option value="">Choose a specification</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" class="qty-input" value="1" min="1">
+                        </div>
+                        <p>Unit price: ₱0.00 &nbsp;|&nbsp; <strong>Line total: ₱0.00</strong></p>
+                    </div>
+                </div>
+
+                <button type="button" id="addItemBtn" class="btn-secondary" style="margin-bottom: 30px;">+ Add another item</button>
+
+                <div class="form-group">
+                    <label>Payment method</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="payment" value="Cash" checked> Cash</label>
+                        <label><input type="radio" name="payment" value="GCash"> GCash</label>
+                        <label><input type="radio" name="payment" value="Bank"> Bank</label>
+                    </div>
+                </div>
+
+                <div class="totals-box">
+                    Total: <span id="grandTotalDisplay" style="font-size: 1.4em;">₱0.00</span>
+                </div>
+
+                <button type="submit" class="btn">Record order</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div id="orders" class="view-section">
+        <h2>Order History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Items</th>
+                    <th>Payment</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="ordersBody">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- INVENTORY TAB -->
+    <div id="inventory" class="view-section">
+        <h2>Manage Inventory</h2>
+        <p>Live view of your remaining stock levels.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Specification</th>
+                    <th>Stock Remaining</th>
+                </tr>
+            </thead>
+            <tbody id="managementBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
