@@ -11,14 +11,18 @@
         p { color: #6b7280; margin-top: 0; font-size: 0.95em; }
         
         /* Tab Styles */
-        .tabs { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+        .tabs { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
         .tab-btn { background: none; border: none; font-size: 1.1em; font-weight: 600; color: #6b7280; cursor: pointer; padding: 5px 10px; }
         .tab-btn.active { color: #2563eb; border-bottom: 3px solid #2563eb; }
         .view-section { display: none; }
         .view-section.active { display: block; }
 
+        /* Filter Section Styles */
+        .filter-section { margin-bottom: 30px; background: #eef2ff; padding: 15px; border-radius: 8px; border: 1px solid #c7d2fe; display: flex; align-items: center; gap: 10px; }
+        .filter-section select { width: 250px; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 40px; font-size: 0.9em; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
         th { background-color: #f9fafb; font-weight: 600; }
         .low-stock { color: #b91c1c; font-weight: bold; }
         .in-stock { color: #047857; }
@@ -37,27 +41,18 @@
     
         /* --- MOBILE RESPONSIVE TWEAKS --- */
         @media (max-width: 600px) {
-            /* Reduce background margins so the app takes up the whole screen */
             body { padding: 10px; }
             .container { padding: 20px 15px; border-radius: 8px; }
-            
-            /* Make headers a bit smaller to save space */
             h1 { font-size: 1.5em; }
             h2 { font-size: 1.3em; }
-
-            /* Allow tables to swipe left/right instead of squishing text */
             table { display: block; overflow-x: auto; white-space: nowrap; }
             th, td { padding: 10px; }
-
-            /* Wrap tabs to a new line if they get too wide */
             .tabs { gap: 10px; justify-content: space-between; }
             .tab-btn { font-size: 1em; padding: 5px 0; flex: 1; }
-
-            /* Make buttons full-width for easy thumb pressing */
             .btn { width: 100%; padding: 15px; font-size: 1.1em; }
-            
-            /* Add some breathing room to the radio buttons */
             .radio-group { flex-direction: column; gap: 10px; }
+            .filter-section { flex-direction: column; align-items: flex-start; }
+            .filter-section select { width: 100%; }
         }
     </style>
 </head>
@@ -73,6 +68,14 @@
         <button class="tab-btn" onclick="switchTab('inventory', this)">Inventory</button>
     </div>
 
+    <!-- Global Chapter Filter applied to all tables -->
+    <div class="filter-section">
+        <label for="chapterFilter"><strong>Filter by Chapter:</strong></label>
+        <select id="chapterFilter">
+            <option value="All">All Chapters</option>
+        </select>
+    </div>
+
     <!-- STORE TAB -->
     <div id="store" class="view-section active">
         <section>
@@ -83,6 +86,7 @@
                         <th>Item</th>
                         <th>Size / specification</th>
                         <th>Category</th>
+                        <th>Chapter & Org</th>
                         <th>Price</th>
                         <th>Available</th>
                         <th>Status</th>
@@ -148,6 +152,7 @@
             <thead>
                 <tr>
                     <th>Order ID</th>
+                    <th>Chapter & Org</th>
                     <th>Items</th>
                     <th>Payment</th>
                     <th>Total</th>
@@ -167,6 +172,7 @@
                 <tr>
                     <th>Item</th>
                     <th>Specification</th>
+                    <th>Chapter & Org</th>
                     <th>Stock Remaining</th>
                 </tr>
             </thead>
